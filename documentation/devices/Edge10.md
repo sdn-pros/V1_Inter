@@ -177,7 +177,6 @@ router bgp 65000
       neighbor 192.10.15.2 activate
       neighbor 192.10.16.2 activate
       network 192.168.0.10/32
-      redistribute connected
    !
    vrf VRF_A
       neighbor 192.10.31.2 remote-as 65000

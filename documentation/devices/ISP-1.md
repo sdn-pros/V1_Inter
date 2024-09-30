@@ -10,7 +10,11 @@
   - [Loopback Interfaces](#loopback-interfaces)
 - [Routing](#routing)
   - [IP Routing](#ip-routing)
+  - [Static Routes](#static-routes)
   - [Router BGP](#router-bgp)
+- [Filters](#filters)
+  - [Prefix-lists](#prefix-lists)
+  - [Route-maps](#route-maps)
 
 ## Spanning Tree
 
@@ -161,6 +165,27 @@ interface Loopback10
 ip routing
 ```
 
+### Static Routes
+
+#### Static Routes Summary
+
+| VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
+| --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
+| default | 0.0.0.0/0 | - | Null0 | 1 | - | - | - |
+| default | 192.53.75.0/24 | - | Ethernet1 | 1 | - | - | - |
+| default | 192.54.75.0/24 | - | Ethernet1 | 1 | - | - | - |
+| default | 192.26.75.0/24 | - | Ethernet1 | 1 | - | - | - |
+
+#### Static Routes Device Configuration
+
+```eos
+!
+ip route 0.0.0.0/0 Null0
+ip route 192.53.75.0/24 Ethernet1
+ip route 192.54.75.0/24 Ethernet1
+ip route 192.26.75.0/24 Ethernet1
+```
+
 ### Router BGP
 
 ASN Notation: asplain
@@ -212,18 +237,100 @@ router bgp 65103
    neighbor 192.16.72.2 allowas-in 6
    neighbor 192.16.75.2 remote-as 65002
    neighbor 192.16.75.2 allowas-in
-   redistribute connected
    !
    address-family ipv4
+      neighbor 192.10.16.1 route-map DEFAULTONLY out
       neighbor 192.10.16.1 activate
+      neighbor 192.11.16.1 route-map DEFAULTONLY out
       neighbor 192.11.16.1 activate
+      neighbor 192.12.16.1 route-map DEFAULTONLY out
       neighbor 192.12.16.1 activate
+      neighbor 192.13.16.1 route-map DEFAULTONLY out
       neighbor 192.13.16.1 activate
+      neighbor 192.14.16.1 route-map DEFAULTONLY out
       neighbor 192.14.16.1 activate
+      neighbor 192.16.51.2 route-map DEFAULTONLY out
       neighbor 192.16.51.2 activate
+      neighbor 192.16.52.2 route-map DEFAULTONLY out
       neighbor 192.16.52.2 activate
       neighbor 192.16.71.2 activate
       neighbor 192.16.72.2 activate
+      neighbor 192.16.75.2 route-map ISP1CONNECTED out
       neighbor 192.16.75.2 activate
+      network 0.0.0.0/0
+      network 192.16.71.0/24
+      network 192.16.72.0/24
       network 192.168.0.16/32
+```
+
+## Filters
+
+### Prefix-lists
+
+#### Prefix-lists Summary
+
+##### DEFAULTONLY
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 0.0.0.0/0 |
+| 20 | permit 192.16.71.0/24 |
+| 30 | permit 192.16.72.0/24 |
+
+##### ISP1CONNECTED
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 192.16.71.0/24 |
+| 20 | permit 192.16.72.0/24 |
+| 30 | permit 192.10.16.0/24 |
+| 40 | permit 192.11.16.0/24 |
+| 50 | permit 192.12.16.0/24 |
+| 60 | permit 192.13.16.0/24 |
+| 70 | permit 192.14.16.0/24 |
+
+#### Prefix-lists Device Configuration
+
+```eos
+!
+ip prefix-list DEFAULTONLY
+   seq 10 permit 0.0.0.0/0
+   seq 20 permit 192.16.71.0/24
+   seq 30 permit 192.16.72.0/24
+!
+ip prefix-list ISP1CONNECTED
+   seq 10 permit 192.16.71.0/24
+   seq 20 permit 192.16.72.0/24
+   seq 30 permit 192.10.16.0/24
+   seq 40 permit 192.11.16.0/24
+   seq 50 permit 192.12.16.0/24
+   seq 60 permit 192.13.16.0/24
+   seq 70 permit 192.14.16.0/24
+```
+
+### Route-maps
+
+#### Route-maps Summary
+
+##### DEFAULTONLY
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list DEFAULTONLY | - | - | - |
+
+##### ISP1CONNECTED
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list ISP1CONNECTED | - | - | - |
+
+#### Route-maps Device Configuration
+
+```eos
+!
+route-map DEFAULTONLY permit 10
+   match ip address prefix-list DEFAULTONLY
+!
+route-map ISP1CONNECTED permit 10
+   match ip address prefix-list ISP1CONNECTED
 ```

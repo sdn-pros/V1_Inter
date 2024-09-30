@@ -159,7 +159,7 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| VRF_A | - | connected |
+| VRF_A | - | - |
 
 #### Router BGP Device Configuration
 
@@ -182,7 +182,6 @@ router bgp 65000
       neighbor 192.20.33.2 remote-as 65000
       neighbor 192.20.33.2 allowas-in 6
       network 192.168.0.20/32
-      redistribute connected
 ```
 
 ## VRF Instances

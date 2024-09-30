@@ -158,7 +158,7 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute |
 | --- | ------------------- | ------------ |
-| VRF_A | - | connected |
+| VRF_A | - | - |
 
 #### Router BGP Device Configuration
 
@@ -183,7 +183,6 @@ router bgp 65000
       neighbor 192.22.34.2 remote-as 65000
       neighbor 192.22.34.2 allowas-in 6
       network 192.168.0.22/32
-      redistribute connected
       !
       address-family ipv4
          neighbor 192.22.34.2 activate

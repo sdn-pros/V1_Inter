@@ -90,6 +90,5 @@ router_bgp:
             - source_protocol: connected        
           networks: 
             - prefix: 192.168.0.21/32
-          redistribute_routes:
-            - source_protocol: connected
+
 

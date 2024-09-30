@@ -147,5 +147,4 @@ router bgp 65000
       neighbor 192.25.76.1 activate
       neighbor 192.26.76.1 activate
       network 192.168.0.76/32
-      redistribute connected
 ```

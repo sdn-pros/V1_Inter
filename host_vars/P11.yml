@@ -98,6 +98,5 @@ router_bgp:
         activate: true
     networks:
       - prefix: 192.168.0.52/32
-    redistribute_routes:
-     - source_protocol: connected
+
 

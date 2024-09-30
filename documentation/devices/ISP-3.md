@@ -10,7 +10,11 @@
   - [Loopback Interfaces](#loopback-interfaces)
 - [Routing](#routing)
   - [IP Routing](#ip-routing)
+  - [Static Routes](#static-routes)
   - [Router BGP](#router-bgp)
+- [Filters](#filters)
+  - [Prefix-lists](#prefix-lists)
+  - [Route-maps](#route-maps)
 
 ## Spanning Tree
 
@@ -143,6 +147,21 @@ interface Loopback10
 ip routing
 ```
 
+### Static Routes
+
+#### Static Routes Summary
+
+| VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
+| --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
+| default | 0.0.0.0/0 | - | Null0 | 1 | - | - | - |
+
+#### Static Routes Device Configuration
+
+```eos
+!
+ip route 0.0.0.0/0 Null0
+```
+
 ### Router BGP
 
 ASN Notation: asplain
@@ -218,8 +237,48 @@ router bgp 65002
    address-family ipv4
       neighbor R1Internet activate
       neighbor R2Internet activate
+      neighbor REGION1 route-map DEFAULTONLY out
       neighbor REGION1 activate
+      neighbor REGION2 route-map DEFAULTONLY out
       neighbor REGION2 activate
+      network 0.0.0.0/0
       network 192.168.0.75/32
-      redistribute connected
+```
+
+## Filters
+
+### Prefix-lists
+
+#### Prefix-lists Summary
+
+##### DEFAULTONLY
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 0.0.0.0/0 |
+
+#### Prefix-lists Device Configuration
+
+```eos
+!
+ip prefix-list DEFAULTONLY
+   seq 10 permit 0.0.0.0/0
+```
+
+### Route-maps
+
+#### Route-maps Summary
+
+##### DEFAULTONLY
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list DEFAULTONLY | - | - | - |
+
+#### Route-maps Device Configuration
+
+```eos
+!
+route-map DEFAULTONLY permit 10
+   match ip address prefix-list DEFAULTONLY
 ```

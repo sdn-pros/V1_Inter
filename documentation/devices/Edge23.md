@@ -155,7 +155,6 @@ router bgp 65000
    neighbor 192.23.25.2 allowas-in 6
    neighbor 192.23.26.2 remote-as 65203
    neighbor 192.23.26.2 allowas-in 6
-   redistribute connected
    !
    address-family ipv4
       neighbor 192.23.25.2 activate
