@@ -172,18 +172,12 @@ ip routing
 | VRF | Destination Prefix | Next Hop IP | Exit interface | Administrative Distance | Tag | Route Name | Metric |
 | --- | ------------------ | ----------- | -------------- | ----------------------- | --- | ---------- | ------ |
 | default | 0.0.0.0/0 | - | Null0 | 1 | - | - | - |
-| default | 192.51.75.0/24 | - | Ethernet1 | 1 | - | - | - |
-| default | 192.52.75.0/24 | - | Ethernet1 | 1 | - | - | - |
-| default | 192.16.75.0/24 | - | Ethernet1 | 1 | - | - | - |
 
 #### Static Routes Device Configuration
 
 ```eos
 !
 ip route 0.0.0.0/0 Null0
-ip route 192.51.75.0/24 Ethernet1
-ip route 192.52.75.0/24 Ethernet1
-ip route 192.16.75.0/24 Ethernet1
 ```
 
 ### Router BGP
@@ -253,7 +247,6 @@ router bgp 65203
       neighbor 192.26.53.2 activate
       neighbor 192.26.54.2 route-map DEFAULTONLY out
       neighbor 192.26.54.2 activate
-      neighbor 192.26.75.2 route-map ISP2CONNECTED out
       neighbor 192.26.75.2 activate
       neighbor 192.26.76.2 activate
       neighbor 192.26.77.2 activate
@@ -261,6 +254,7 @@ router bgp 65203
       network 192.26.76.0/24
       network 192.26.77.0/24
       network 192.168.0.26/32
+      redistribute connected
 ```
 
 ## Filters

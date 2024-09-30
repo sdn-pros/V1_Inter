@@ -160,28 +160,19 @@ router_bgp:
         activate: true 
       - ip_address: 192.16.75.2
         activate: true
-        route_map_out: ISP1CONNECTED
     networks: 
       - prefix: 192.168.0.16/32
       - prefix: 0.0.0.0/0
       - prefix: 192.16.71.0/24
       - prefix: 192.16.72.0/24
+    redistribute_routes:
+      - source_protocol: connected
+
 static_routes:
   - vrf: default
     destination_address_prefix: 0.0.0.0/0
     interface: Null0
-  - vrf: default  
-    # Region 1 Network/Mask.
-    destination_address_prefix: 192.53.75.0/24
-    interface: Ethernet1
-  - vrf: default
-    # Region 1 Network/Mask.
-    destination_address_prefix:  192.54.75.0/24
-    interface: Ethernet1
-  - vrf: default
-    # Region 1 Network/Mask.
-    destination_address_prefix:  192.26.75.0/24
-    interface: Ethernet1
+
 
 prefix_lists:
   - name: DEFAULTONLY
