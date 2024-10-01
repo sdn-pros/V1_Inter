@@ -170,31 +170,17 @@ router_bgp:
       - source_protocol: connected
 
 static_routes:
-    # VRF Name.
   - vrf: default
-
-    # IPv4_network/Mask.
     destination_address_prefix: 0.0.0.0/0
     interface: Null0
 
 
 prefix_lists:
-  # Prefix-list Name.
   - name: DEFAULTONLY
     sequence_numbers:
-      # Sequence ID.
       - sequence: 10
-        # Action as string.
-        # Example: "permit 10.255.0.0/27 eq 32"
         action: permit 0.0.0.0/0
-      - sequence: 20
-        # Action as string.
-        # Example: "permit 10.255.0.0/27 eq 32"
-        action: permit 192.26.76.0/24
-      - sequence: 30
-        # Action as string.
-        # Example: "permit 10.255.0.0/27 eq 32"
-        action: permit 192.26.77.0/24
+
 
   - name: ISP2CONNECTED
     sequence_numbers:

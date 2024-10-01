@@ -238,24 +238,23 @@ cvp_configlets:
     Ethernet9\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.24.26.2/24\n!\ninterface
     Ethernet10\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.26.75.1/24\n!\ninterface
     Loopback10\n   description ISP_lo10\n   no shutdown\n   ip address 192.168.0.26/32\n!\nip
-    routing\n!\nip prefix-list DEFAULTONLY\n   seq 10 permit 0.0.0.0/0\n   seq 20
-    permit 192.26.76.0/24\n   seq 30 permit 192.26.77.0/24\n!\nip prefix-list ISP2CONNECTED\n
-    \  seq 10 permit 192.26.76.0/24\n   seq 20 permit 192.26.77.0/24\n   seq 30 permit
-    192.20.26.0/24\n   seq 40 permit 192.21.26.0/24\n   seq 50 permit 192.22.26.0/24\n
-    \  seq 60 permit 192.23.26.0/24\n   seq 70 permit 192.24.26.0/24\n!\nip route
-    0.0.0.0/0 Null0\n!\nroute-map DEFAULTONLY permit 10\n   match ip address prefix-list
-    DEFAULTONLY\n!\nroute-map ISP2CONNECTED permit 10\n   match ip address prefix-list
-    ISP2CONNECTED\n!\nrouter bgp 65203\n   router-id 192.168.0.26\n   neighbor 192.20.26.1
-    remote-as 65000\n   neighbor 192.20.26.1 allowas-in 6\n   neighbor 192.21.26.1
-    remote-as 65000\n   neighbor 192.21.26.1 allowas-in 6\n   neighbor 192.22.26.1
-    remote-as 65000\n   neighbor 192.22.26.1 allowas-in 6\n   neighbor 192.23.26.1
-    remote-as 65000\n   neighbor 192.23.26.1 allowas-in 6\n   neighbor 192.24.26.1
-    remote-as 65000\n   neighbor 192.24.26.1 allowas-in 6\n   neighbor 192.26.53.2
-    remote-as 65000\n   neighbor 192.26.53.2 allowas-in 6\n   neighbor 192.26.54.2
-    remote-as 65000\n   neighbor 192.26.54.2 allowas-in 6\n   neighbor 192.26.75.2
-    remote-as 65002\n   neighbor 192.26.75.2 allowas-in 6\n   neighbor 192.26.76.2
-    remote-as 65000\n   neighbor 192.26.76.2 allowas-in 6\n   neighbor 192.26.77.2
-    remote-as 65000\n   neighbor 192.26.77.2 allowas-in 6\n   !\n   address-family
+    routing\n!\nip prefix-list DEFAULTONLY\n   seq 10 permit 0.0.0.0/0\n!\nip prefix-list
+    ISP2CONNECTED\n   seq 10 permit 192.26.76.0/24\n   seq 20 permit 192.26.77.0/24\n
+    \  seq 30 permit 192.20.26.0/24\n   seq 40 permit 192.21.26.0/24\n   seq 50 permit
+    192.22.26.0/24\n   seq 60 permit 192.23.26.0/24\n   seq 70 permit 192.24.26.0/24\n!\nip
+    route 0.0.0.0/0 Null0\n!\nroute-map DEFAULTONLY permit 10\n   match ip address
+    prefix-list DEFAULTONLY\n!\nroute-map ISP2CONNECTED permit 10\n   match ip address
+    prefix-list ISP2CONNECTED\n!\nrouter bgp 65203\n   router-id 192.168.0.26\n   neighbor
+    192.20.26.1 remote-as 65000\n   neighbor 192.20.26.1 allowas-in 6\n   neighbor
+    192.21.26.1 remote-as 65000\n   neighbor 192.21.26.1 allowas-in 6\n   neighbor
+    192.22.26.1 remote-as 65000\n   neighbor 192.22.26.1 allowas-in 6\n   neighbor
+    192.23.26.1 remote-as 65000\n   neighbor 192.23.26.1 allowas-in 6\n   neighbor
+    192.24.26.1 remote-as 65000\n   neighbor 192.24.26.1 allowas-in 6\n   neighbor
+    192.26.53.2 remote-as 65000\n   neighbor 192.26.53.2 allowas-in 6\n   neighbor
+    192.26.54.2 remote-as 65000\n   neighbor 192.26.54.2 allowas-in 6\n   neighbor
+    192.26.75.2 remote-as 65002\n   neighbor 192.26.75.2 allowas-in 6\n   neighbor
+    192.26.76.2 remote-as 65000\n   neighbor 192.26.76.2 allowas-in 6\n   neighbor
+    192.26.77.2 remote-as 65000\n   neighbor 192.26.77.2 allowas-in 6\n   !\n   address-family
     ipv4\n      neighbor 192.20.26.1 route-map DEFAULTONLY out\n      neighbor 192.20.26.1
     activate\n      neighbor 192.21.26.1 route-map DEFAULTONLY out\n      neighbor
     192.21.26.1 activate\n      neighbor 192.22.26.1 route-map DEFAULTONLY out\n      neighbor
