@@ -587,4 +587,8 @@ interface Ethernet5
   no switchport
   ip address 192.52.82.2/24
 !
+!
+router bgp 65001
+ redistribute connected
+!
 ```

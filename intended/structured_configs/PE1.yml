@@ -231,4 +231,4 @@ ip_virtual_router_mac_address: 02:1c:73:00:dc:00
 metadata:
   platform: vEOS-lab
 eos_cli: "interface Ethernet4\n  description REGION1\n  no switchport\n  ip address 192.51.81.2/24 \n!\ninterface Ethernet5\n  description
-  REGION1\n  no switchport\n  ip address 192.52.81.2/24\n!"
+  REGION1\n  no switchport\n  ip address 192.52.81.2/24\n!\nrouter bgp 65001\n redistribute connected\n!"

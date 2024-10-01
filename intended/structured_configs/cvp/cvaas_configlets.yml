@@ -715,7 +715,7 @@ cvp_configlets:
     api http-commands\n   protocol https\n   no shutdown\n   !\n   vrf MGMT\n      no
     shutdown\n!\ninterface Ethernet4\n  description REGION1\n  no switchport\n  ip
     address 192.51.81.2/24 \n!\ninterface Ethernet5\n  description REGION1\n  no switchport\n
-    \ ip address 192.52.81.2/24\n!\n!\nend\n"
+    \ ip address 192.52.81.2/24\n!\nrouter bgp 65001\n redistribute connected\n!\n!\nend\n"
   AVD_PE2: "!RANCID-CONTENT-TYPE: arista\n!\nvlan internal order ascending range 1006
     1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice routing protocols model
     multi-agent\n!\nhostname PE2\ndns domain atd.lab\n!\nspanning-tree mode mstp\nspanning-tree
@@ -768,7 +768,8 @@ cvp_configlets:
     api http-commands\n   protocol https\n   no shutdown\n   !\n   vrf MGMT\n      no
     shutdown\n!\ninterface Ethernet4\n  interface Ethernet4\n  description REGION1\n
     \ no switchport\n  ip address 192.51.82.2/24\n!\ninterface Ethernet5\n  description
-    REGION1\n  no switchport\n  ip address 192.52.82.2/24\n!\n!\nend\n"
+    REGION1\n  no switchport\n  ip address 192.52.82.2/24\n!\n!\nrouter bgp 65001\n
+    redistribute connected\n!\n!\nend\n"
   AVD_PE3: "!RANCID-CONTENT-TYPE: arista\n!\nvlan internal order ascending range 1006
     1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice routing protocols model
     multi-agent\n!\nhostname PE3\ndns domain atd.lab\n!\nspanning-tree mode mstp\nspanning-tree
@@ -821,7 +822,7 @@ cvp_configlets:
     api http-commands\n   protocol https\n   no shutdown\n   !\n   vrf MGMT\n      no
     shutdown\n!\ninterface Ethernet4\n  description REGION2\n  no switchport\n  ip
     address 192.53.83.2/24\n!\ninterface Ethernet5\n  description REGION2\n  no switchport\n
-    \ ip address 192.54.83.2/24\n  !\n!\nend\n"
+    \ ip address 192.54.83.2/24\n!\nrouter bgp 65001\n redistribute connected\n!\n!\nend\n"
   AVD_PE4: "!RANCID-CONTENT-TYPE: arista\n!\nvlan internal order ascending range 1006
     1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice routing protocols model
     multi-agent\n!\nhostname PE4\ndns domain atd.lab\n!\nspanning-tree mode mstp\nspanning-tree
@@ -874,7 +875,7 @@ cvp_configlets:
     api http-commands\n   protocol https\n   no shutdown\n   !\n   vrf MGMT\n      no
     shutdown\n!\ninterface Ethernet4\n  description REGION2\n  no switchport\n  ip
     address 192.53.84.2/24\n!\ninterface Ethernet5\n  description REGION2\n  no switchport\n
-    \ ip address 192.54.84.2/24\n!\nend\n"
+    \ ip address 192.54.84.2/24\n! \nrouter bgp 65001\n  redistribute connected\n!\n!\nend\n"
   AVD_R1-PE1: "!RANCID-CONTENT-TYPE: arista\n!\ntransceiver qsfp default-mode 4x10G\n!\nhostname
     R1-PE1\n!\nspanning-tree mode none\n!\nno enable password\nno aaa root\n!\ninterface
     Ethernet1\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.15.51.1/24\n!\ninterface

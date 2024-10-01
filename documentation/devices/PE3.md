@@ -585,5 +585,8 @@ interface Ethernet5
   description REGION2
   no switchport
   ip address 192.54.83.2/24
-  !
+!
+router bgp 65001
+ redistribute connected
+!
 ```

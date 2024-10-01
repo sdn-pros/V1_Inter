@@ -26,4 +26,8 @@ custom_eos_cli: |-
     no switchport
     ip address 192.52.82.2/24
   !
+  !
+  router bgp 65001
+   redistribute connected
+  !
   
