@@ -54,7 +54,13 @@ router_bgp:
   as: 65000
   router_id: 192.168.0.54
   peer_groups:
-    - name: CORE
+    - name: COREPE3
+      remote_as: 65001
+      allowas_in:
+        enabled: true
+        # Number of local ASNs allowed in a BGP update.
+        times: 6
+    - name: COREPE4
       remote_as: 65001
       allowas_in:
         enabled: true
@@ -68,9 +74,9 @@ router_bgp:
         times: 6
   neighbors:
     - ip_address: 192.54.83.2
-      peer_group: CORE
+      peer_group: COREPE3
     - ip_address: 192.54.84.2
-      peer_group: CORE
+      peer_group: COREPE4
     - ip_address: 192.54.75.2
       peer_group: ISP-3
     - ip_address: 192.25.54.1
