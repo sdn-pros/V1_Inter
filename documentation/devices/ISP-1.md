@@ -268,8 +268,6 @@ router bgp 65103
 | Sequence | Action |
 | -------- | ------ |
 | 10 | permit 0.0.0.0/0 |
-| 20 | permit 192.16.71.0/24 |
-| 30 | permit 192.16.72.0/24 |
 
 ##### ISP1CONNECTED
 
@@ -289,8 +287,6 @@ router bgp 65103
 !
 ip prefix-list DEFAULTONLY
    seq 10 permit 0.0.0.0/0
-   seq 20 permit 192.16.71.0/24
-   seq 30 permit 192.16.72.0/24
 !
 ip prefix-list ISP1CONNECTED
    seq 10 permit 192.16.71.0/24

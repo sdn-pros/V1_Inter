@@ -11,6 +11,9 @@
 - [Routing](#routing)
   - [IP Routing](#ip-routing)
   - [Router BGP](#router-bgp)
+- [Filters](#filters)
+  - [Prefix-lists](#prefix-lists)
+  - [Route-maps](#route-maps)
 
 ## Spanning Tree
 
@@ -144,7 +147,69 @@ router bgp 65000
    neighbor 192.76.77.2 allowas-in 6
    !
    address-family ipv4
+      neighbor 192.25.76.1 route-map E2OUT out
       neighbor 192.25.76.1 activate
+      neighbor 192.26.76.1 route-map E3OUT out
       neighbor 192.26.76.1 activate
       network 192.168.0.76/32
+```
+
+## Filters
+
+### Prefix-lists
+
+#### Prefix-lists Summary
+
+##### E2OUT
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 192.25.76.0/24 |
+| 20 | permit 192.168.0.76/32 |
+
+##### E3OUT
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 192.26.76.0/24 |
+| 20 | permit 192.168.0.76/32 |
+
+#### Prefix-lists Device Configuration
+
+```eos
+!
+ip prefix-list E2OUT
+   seq 10 permit 192.25.76.0/24
+   seq 20 permit 192.168.0.76/32
+!
+ip prefix-list E3OUT
+   seq 10 permit 192.26.76.0/24
+   seq 20 permit 192.168.0.76/32
+```
+
+### Route-maps
+
+#### Route-maps Summary
+
+##### E2OUT
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list E2OUT | - | - | - |
+
+##### E3OUT
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list E3OUT | - | - | - |
+
+#### Route-maps Device Configuration
+
+```eos
+!
+route-map E2OUT permit 10
+   match ip address prefix-list E2OUT
+!
+route-map E3OUT permit 10
+   match ip address prefix-list E3OUT
 ```

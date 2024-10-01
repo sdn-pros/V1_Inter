@@ -89,13 +89,110 @@ router_bgp:
     neighbors:
       - ip_address: 192.25.54.1
         activate: true
+        route_map_out: E3OUT
       - ip_address: 192.26.54.1
         activate: true
+        route_map_out: E2OUT
     peer_groups:
-      - name: CORE
+      - name: COREPE3
         activate: true
+        route_map_out: E4OUT
+      - name: COREPE4
+        activate: true
+        route_map_out: E5OUT
       - name: ISP-3
         activate: true
+        route_map_out: E6OUT
     networks:
       - prefix: 192.168.0.54/32
+prefix_lists:
+  - name: E2OUT
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.26.54.0/24
+      - sequence: 20
+        action: permit 192.168.0.54/32
+  - name: E3OUT
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.25.54.0/24
+      - sequence: 20
+        action: permit 192.168.0.54/32
+  - name: E4OUT
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.54.83.0/24
+      - sequence: 20
+        action: permit 192.168.0.54/32
+      - sequence: 30
+        action: permit 192.25.76.0/32  
+      - sequence: 40
+        action: permit 192.25.77.0/32 
+      - sequence: 50
+        action: permit 192.26.76.0/32  
+      - sequence: 60
+        action: permit 192.26.77.0/32 
+  - name: E5OUT
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.54.84.0/24
+      - sequence: 20
+        action: permit 192.168.0.54/32
+      - sequence: 30
+        action: permit 192.25.76.0/32  
+      - sequence: 40
+        action: permit 192.25.77.0/32 
+      - sequence: 50
+        action: permit 192.26.76.0/32  
+      - sequence: 60
+        action: permit 192.26.77.0/32 
+  - name: E6OUT
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.54.75.0/24
+      - sequence: 20
+        action: permit 192.168.0.54/32
+      - sequence: 30
+        action: permit 192.25.76.0/32  
+      - sequence: 40
+        action: permit 192.25.77.0/32 
+      - sequence: 50
+        action: permit 192.26.76.0/32  
+      - sequence: 60
+        action: permit 192.26.77.0/32 
+    
+
+route_maps:
+  - name: E2OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list E2OUT
+  - name: E3OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list E3OUT
+  - name: E4OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list E4OUT
+  - name: E5OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list E5OUT
+  - name: E6OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list E6OUT
+         
+
 

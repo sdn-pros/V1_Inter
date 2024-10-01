@@ -197,22 +197,34 @@ cvp_configlets:
     Ethernet9\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.14.16.2/24\n!\ninterface
     Ethernet10\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.16.75.1/24\n!\ninterface
     Loopback10\n   description ISP_lo10\n   no shutdown\n   ip address 192.168.0.16/32\n!\nip
-    routing\n!\nrouter bgp 65103\n   router-id 192.168.0.16\n   neighbor 192.10.16.1
-    remote-as 65000\n   neighbor 192.10.16.1 allowas-in 6\n   neighbor 192.11.16.1
-    remote-as 65000\n   neighbor 192.11.16.1 allowas-in 6\n   neighbor 192.12.16.1
-    remote-as 65000\n   neighbor 192.12.16.1 allowas-in 6\n   neighbor 192.13.16.1
-    remote-as 65000\n   neighbor 192.13.16.1 allowas-in 6\n   neighbor 192.14.16.1
-    remote-as 65000\n   neighbor 192.14.16.1 allowas-in 6\n   neighbor 192.16.51.2
-    remote-as 65000\n   neighbor 192.16.51.2 allowas-in 6\n   neighbor 192.16.52.2
-    remote-as 65000\n   neighbor 192.16.52.2 allowas-in 6\n   neighbor 192.16.71.2
-    remote-as 65000\n   neighbor 192.16.71.2 allowas-in 6\n   neighbor 192.16.72.2
-    remote-as 65000\n   neighbor 192.16.72.2 allowas-in 6\n   neighbor 192.16.75.2
-    remote-as 65002\n   neighbor 192.16.75.2 allowas-in\n   redistribute connected\n
-    \  !\n   address-family ipv4\n      neighbor 192.10.16.1 activate\n      neighbor
-    192.11.16.1 activate\n      neighbor 192.12.16.1 activate\n      neighbor 192.13.16.1
-    activate\n      neighbor 192.14.16.1 activate\n      neighbor 192.16.51.2 activate\n
-    \     neighbor 192.16.52.2 activate\n      neighbor 192.16.71.2 activate\n      neighbor
-    192.16.72.2 activate\n      neighbor 192.16.75.2 activate\n      network 192.168.0.16/32\n!\nend\n"
+    routing\n!\nip prefix-list DEFAULTONLY\n   seq 10 permit 0.0.0.0/0\n!\nip prefix-list
+    ISP1CONNECTED\n   seq 10 permit 192.16.71.0/24\n   seq 20 permit 192.16.72.0/24\n
+    \  seq 30 permit 192.10.16.0/24\n   seq 40 permit 192.11.16.0/24\n   seq 50 permit
+    192.12.16.0/24\n   seq 60 permit 192.13.16.0/24\n   seq 70 permit 192.14.16.0/24\n!\nip
+    route 0.0.0.0/0 Null0\n!\nroute-map DEFAULTONLY permit 10\n   match ip address
+    prefix-list DEFAULTONLY\n!\nroute-map ISP1CONNECTED permit 10\n   match ip address
+    prefix-list ISP1CONNECTED\n!\nrouter bgp 65103\n   router-id 192.168.0.16\n   neighbor
+    192.10.16.1 remote-as 65000\n   neighbor 192.10.16.1 allowas-in 6\n   neighbor
+    192.11.16.1 remote-as 65000\n   neighbor 192.11.16.1 allowas-in 6\n   neighbor
+    192.12.16.1 remote-as 65000\n   neighbor 192.12.16.1 allowas-in 6\n   neighbor
+    192.13.16.1 remote-as 65000\n   neighbor 192.13.16.1 allowas-in 6\n   neighbor
+    192.14.16.1 remote-as 65000\n   neighbor 192.14.16.1 allowas-in 6\n   neighbor
+    192.16.51.2 remote-as 65000\n   neighbor 192.16.51.2 allowas-in 6\n   neighbor
+    192.16.52.2 remote-as 65000\n   neighbor 192.16.52.2 allowas-in 6\n   neighbor
+    192.16.71.2 remote-as 65000\n   neighbor 192.16.71.2 allowas-in 6\n   neighbor
+    192.16.72.2 remote-as 65000\n   neighbor 192.16.72.2 allowas-in 6\n   neighbor
+    192.16.75.2 remote-as 65002\n   neighbor 192.16.75.2 allowas-in\n   !\n   address-family
+    ipv4\n      neighbor 192.10.16.1 route-map DEFAULTONLY out\n      neighbor 192.10.16.1
+    activate\n      neighbor 192.11.16.1 route-map DEFAULTONLY out\n      neighbor
+    192.11.16.1 activate\n      neighbor 192.12.16.1 route-map DEFAULTONLY out\n      neighbor
+    192.12.16.1 activate\n      neighbor 192.13.16.1 route-map DEFAULTONLY out\n      neighbor
+    192.13.16.1 activate\n      neighbor 192.14.16.1 route-map DEFAULTONLY out\n      neighbor
+    192.14.16.1 activate\n      neighbor 192.16.51.2 route-map DEFAULTONLY out\n      neighbor
+    192.16.51.2 activate\n      neighbor 192.16.52.2 route-map DEFAULTONLY out\n      neighbor
+    192.16.52.2 activate\n      neighbor 192.16.71.2 activate\n      neighbor 192.16.72.2
+    activate\n      neighbor 192.16.75.2 activate\n      network 0.0.0.0/0\n      network
+    192.16.71.0/24\n      network 192.16.72.0/24\n      network 192.168.0.16/32\n
+    \     redistribute connected\n!\nend\n"
   AVD_ISP-2: "!RANCID-CONTENT-TYPE: arista\n!\ntransceiver qsfp default-mode 4x10G\n!\nhostname
     ISP-2\n!\nspanning-tree mode none\n!\nno enable password\nno aaa root\n!\ninterface
     Ethernet1\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.26.53.1/24\n!\ninterface
@@ -226,7 +238,14 @@ cvp_configlets:
     Ethernet9\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.24.26.2/24\n!\ninterface
     Ethernet10\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.26.75.1/24\n!\ninterface
     Loopback10\n   description ISP_lo10\n   no shutdown\n   ip address 192.168.0.26/32\n!\nip
-    routing\n!\nrouter bgp 65203\n   router-id 192.168.0.26\n   neighbor 192.20.26.1
+    routing\n!\nip prefix-list DEFAULTONLY\n   seq 10 permit 0.0.0.0/0\n   seq 20
+    permit 192.26.76.0/24\n   seq 30 permit 192.26.77.0/24\n!\nip prefix-list ISP2CONNECTED\n
+    \  seq 10 permit 192.26.76.0/24\n   seq 20 permit 192.26.77.0/24\n   seq 30 permit
+    192.20.26.0/24\n   seq 40 permit 192.21.26.0/24\n   seq 50 permit 192.22.26.0/24\n
+    \  seq 60 permit 192.23.26.0/24\n   seq 70 permit 192.24.26.0/24\n!\nip route
+    0.0.0.0/0 Null0\n!\nroute-map DEFAULTONLY permit 10\n   match ip address prefix-list
+    DEFAULTONLY\n!\nroute-map ISP2CONNECTED permit 10\n   match ip address prefix-list
+    ISP2CONNECTED\n!\nrouter bgp 65203\n   router-id 192.168.0.26\n   neighbor 192.20.26.1
     remote-as 65000\n   neighbor 192.20.26.1 allowas-in 6\n   neighbor 192.21.26.1
     remote-as 65000\n   neighbor 192.21.26.1 allowas-in 6\n   neighbor 192.22.26.1
     remote-as 65000\n   neighbor 192.22.26.1 allowas-in 6\n   neighbor 192.23.26.1
@@ -237,11 +256,17 @@ cvp_configlets:
     remote-as 65002\n   neighbor 192.26.75.2 allowas-in 6\n   neighbor 192.26.76.2
     remote-as 65000\n   neighbor 192.26.76.2 allowas-in 6\n   neighbor 192.26.77.2
     remote-as 65000\n   neighbor 192.26.77.2 allowas-in 6\n   !\n   address-family
-    ipv4\n      neighbor 192.20.26.1 activate\n      neighbor 192.21.26.1 activate\n
-    \     neighbor 192.22.26.1 activate\n      neighbor 192.23.26.1 activate\n      neighbor
-    192.24.26.1 activate\n      neighbor 192.26.53.2 activate\n      neighbor 192.26.54.2
-    activate\n      neighbor 192.26.76.2 activate\n      neighbor 192.26.77.2 activate\n
-    \     network 192.168.0.26/32\n      redistribute connected\n!\nend\n"
+    ipv4\n      neighbor 192.20.26.1 route-map DEFAULTONLY out\n      neighbor 192.20.26.1
+    activate\n      neighbor 192.21.26.1 route-map DEFAULTONLY out\n      neighbor
+    192.21.26.1 activate\n      neighbor 192.22.26.1 route-map DEFAULTONLY out\n      neighbor
+    192.22.26.1 activate\n      neighbor 192.23.26.1 route-map DEFAULTONLY out\n      neighbor
+    192.23.26.1 activate\n      neighbor 192.24.26.1 route-map DEFAULTONLY out\n      neighbor
+    192.24.26.1 activate\n      neighbor 192.26.53.2 route-map DEFAULTONLY out\n      neighbor
+    192.26.53.2 activate\n      neighbor 192.26.54.2 route-map DEFAULTONLY out\n      neighbor
+    192.26.54.2 activate\n      neighbor 192.26.75.2 activate\n      neighbor 192.26.76.2
+    activate\n      neighbor 192.26.77.2 activate\n      network 0.0.0.0/0\n      network
+    192.26.76.0/24\n      network 192.26.77.0/24\n      network 192.168.0.26/32\n
+    \     redistribute connected\n!\nend\n"
   AVD_ISP-3: "!RANCID-CONTENT-TYPE: arista\n!\ntransceiver qsfp default-mode 4x10G\n!\nhostname
     ISP-3\n!\nspanning-tree mode none\n!\nno enable password\nno aaa root\n!\ninterface
     Ethernet1\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.51.75.2/24\n!\ninterface
@@ -253,7 +278,9 @@ cvp_configlets:
     \  mtu 1500\n   no switchport\n   ip address 192.16.75.2/24\n!\ninterface Ethernet8\n
     \  no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.26.75.2/24\n!\ninterface
     Loopback10\n   description ISP-3_lo10\n   no shutdown\n   ip address 192.168.0.75/32\n!\nip
-    routing\n!\nrouter bgp 65002\n   router-id 192.168.0.75\n   neighbor R1Internet
+    routing\n!\nip prefix-list DEFAULTONLY\n   seq 10 permit 0.0.0.0/0\n!\nip route
+    0.0.0.0/0 Null0\n!\nroute-map DEFAULTONLY permit 10\n   match ip address prefix-list
+    DEFAULTONLY\n!\nrouter bgp 65002\n   router-id 192.168.0.75\n   neighbor R1Internet
     peer group\n   neighbor R1Internet remote-as 65103\n   neighbor R2Internet peer
     group\n   neighbor R2Internet remote-as 65203\n   neighbor REGION1 peer group\n
     \  neighbor REGION1 remote-as 65000\n   neighbor REGION1 allowas-in\n   neighbor
@@ -262,8 +289,10 @@ cvp_configlets:
     R2Internet\n   neighbor 192.51.75.1 peer group REGION1\n   neighbor 192.52.75.1
     peer group REGION1\n   neighbor 192.53.75.1 peer group REGION2\n   neighbor 192.54.75.1
     peer group REGION2\n   !\n   address-family ipv4\n      neighbor R1Internet activate\n
-    \     neighbor R2Internet activate\n      neighbor REGION1 activate\n      neighbor
-    REGION2 activate\n      network 192.168.0.75/32\n      redistribute connected\n!\nend\n"
+    \     neighbor R2Internet activate\n      neighbor REGION1 route-map DEFAULTONLY
+    out\n      neighbor REGION1 activate\n      neighbor REGION2 route-map DEFAULTONLY
+    out\n      neighbor REGION2 activate\n      network 0.0.0.0/0\n      network 192.168.0.75/32\n
+    \     redistribute connected\n!\nend\n"
   AVD_Leaf11: "!RANCID-CONTENT-TYPE: arista\n!\ntransceiver qsfp default-mode 4x10G\n!\nhostname
     Leaf11\n!\nspanning-tree mode none\n!\nno enable password\nno aaa root\n!\ninterface
     Ethernet1\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 172.16.11.254/24\n!\ninterface
@@ -346,15 +375,33 @@ cvp_configlets:
     Ethernet6\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.51.75.1/24\n!\ninterface
     Ethernet7\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.14.51.2/24\n!\ninterface
     Loopback10\n   description Region1_P10_lo10\n   no shutdown\n   ip address 192.168.0.51/32\n!\nip
-    routing\n!\nrouter bgp 65000\n   router-id 51.51.51.51\n   neighbor CORE peer
-    group\n   neighbor CORE remote-as 65001\n   neighbor CORE allowas-in 6\n   neighbor
-    ISP-3 peer group\n   neighbor ISP-3 remote-as 65002\n   neighbor ISP-3 allowas-in
-    6\n   neighbor 192.15.51.1 remote-as 65102\n   neighbor 192.15.51.1 allowas-in
-    6\n   neighbor 192.16.51.1 remote-as 65103\n   neighbor 192.16.51.1 allowas-in
-    6\n   neighbor 192.51.75.2 peer group ISP-3\n   neighbor 192.51.81.2 peer group
-    CORE\n   neighbor 192.51.82.2 peer group CORE\n   !\n   address-family ipv4\n
-    \     neighbor CORE activate\n      neighbor ISP-3 activate\n      neighbor 192.15.51.1
-    activate\n      neighbor 192.16.51.1 activate\n      network 192.168.0.51/32\n!\nend\n"
+    routing\n!\nip prefix-list E2OUT\n   seq 10 permit 192.15.51.0/24\n   seq 20 permit
+    192.168.0.51/32\n!\nip prefix-list E3OUT\n   seq 10 permit 192.16.51.0/24\n   seq
+    20 permit 192.168.0.51/32\n!\nip prefix-list E4OUT\n   seq 10 permit 192.51.81.0/24\n
+    \  seq 20 permit 192.168.0.51/32\n   seq 30 permit 192.15.71.0/32\n   seq 40 permit
+    192.15.72.0/32\n   seq 50 permit 192.16.71.0/32\n   seq 60 permit 192.16.72.0/32\n!\nip
+    prefix-list E5OUT\n   seq 10 permit 192.51.82.0/24\n   seq 20 permit 192.168.0.51/32\n
+    \  seq 30 permit 192.15.71.0/32\n   seq 40 permit 192.15.72.0/32\n   seq 50 permit
+    192.16.71.0/32\n   seq 60 permit 192.16.72.0/32\n!\nip prefix-list E6OUT\n   seq
+    10 permit 192.51.75.0/24\n   seq 20 permit 192.168.0.51/32\n   seq 30 permit 192.15.71.0/32\n
+    \  seq 40 permit 192.15.72.0/32\n   seq 50 permit 192.16.71.0/32\n   seq 60 permit
+    192.16.72.0/32\n!\nroute-map E2OUT permit 10\n   match ip address prefix-list
+    E2OUT\n!\nroute-map E3OUT permit 10\n   match ip address prefix-list E3OUT\n!\nroute-map
+    E4OUT permit 10\n   match ip address prefix-list E4OUT\n!\nroute-map E5OUT permit
+    10\n   match ip address prefix-list E5OUT\n!\nroute-map E6OUT permit 10\n   match
+    ip address prefix-list E6OUT\n!\nrouter bgp 65000\n   router-id 51.51.51.51\n
+    \  neighbor CORE peer group\n   neighbor CORE remote-as 65001\n   neighbor CORE
+    allowas-in 6\n   neighbor ISP-3 peer group\n   neighbor ISP-3 remote-as 65002\n
+    \  neighbor ISP-3 allowas-in 6\n   neighbor 192.15.51.1 remote-as 65102\n   neighbor
+    192.15.51.1 allowas-in 6\n   neighbor 192.16.51.1 remote-as 65103\n   neighbor
+    192.16.51.1 allowas-in 6\n   neighbor 192.51.75.2 peer group ISP-3\n   neighbor
+    192.51.81.2 peer group COREPE1\n   neighbor 192.51.82.2 peer group COREPE2\n   !\n
+    \  address-family ipv4\n      neighbor COREPE1 route-map E4OUT out\n      neighbor
+    COREPE1 activate\n      neighbor COREPE2 route-map E5OUT out\n      neighbor COREPE2
+    activate\n      neighbor ISP-3 route-map E6OUT out\n      neighbor ISP-3 activate\n
+    \     neighbor 192.15.51.1 route-map E2OUT out\n      neighbor 192.15.51.1 activate\n
+    \     neighbor 192.16.51.1 route-map E3OUT out\n      neighbor 192.16.51.1 activate\n
+    \     network 192.168.0.51/32\n!\nend\n"
   AVD_P11: "!RANCID-CONTENT-TYPE: arista\n!\ntransceiver qsfp default-mode 4x10G\n!\nhostname
     P11\n!\nspanning-tree mode none\n!\nno enable password\nno aaa root\n!\ninterface
     Ethernet1\n   shutdown\n   mtu 1500\n   no switchport\n   ip address 192.51.52.2/24\n!\ninterface
@@ -365,15 +412,34 @@ cvp_configlets:
     Ethernet6\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.52.75.1/24\n!\ninterface
     Ethernet7\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.14.52.2/24\n!\ninterface
     Loopback10\n   description Region1_P11_lo10\n   no shutdown\n   ip address 192.168.0.52/32\n!\nip
-    routing\n!\nrouter bgp 65000\n   router-id 52.52.52.52\n   neighbor CORE peer
-    group\n   neighbor CORE remote-as 65001\n   neighbor CORE allowas-in 6\n   neighbor
-    ISP-3 peer group\n   neighbor ISP-3 remote-as 65002\n   neighbor ISP-3 allowas-in
-    6\n   neighbor 192.15.52.1 remote-as 65102\n   neighbor 192.15.52.1 allowas-in
-    6\n   neighbor 192.16.52.1 remote-as 65103\n   neighbor 192.16.52.1 allowas-in
-    6\n   neighbor 192.52.75.2 peer group ISP-3\n   neighbor 192.52.81.2 peer group
-    CORE\n   neighbor 192.52.82.2 peer group CORE\n   !\n   address-family ipv4\n
-    \     neighbor CORE activate\n      neighbor ISP-3 activate\n      neighbor 192.15.52.1
-    activate\n      neighbor 192.16.52.1 activate\n      network 192.168.0.52/32\n!\nend\n"
+    routing\n!\nip prefix-list E2OUT\n   seq 10 permit 192.16.52.0/24\n   seq 20 permit
+    192.168.0.52/32\n!\nip prefix-list E3OUT\n   seq 10 permit 192.15.52.0/24\n   seq
+    20 permit 192.168.0.52/32\n!\nip prefix-list E4OUT\n   seq 10 permit 192.52.81.0/24\n
+    \  seq 20 permit 192.168.0.52/32\n   seq 30 permit 192.15.71.0/32\n   seq 40 permit
+    192.15.72.0/32\n   seq 50 permit 192.16.71.0/32\n   seq 60 permit 192.16.72.0/32\n!\nip
+    prefix-list E5OUT\n   seq 10 permit 192.52.82.0/24\n   seq 20 permit 192.168.0.52/32\n
+    \  seq 30 permit 192.15.71.0/32\n   seq 40 permit 192.15.72.0/32\n   seq 50 permit
+    192.16.71.0/32\n   seq 60 permit 192.16.72.0/32\n!\nip prefix-list E6OUT\n   seq
+    10 permit 192.52.75.0/24\n   seq 20 permit 192.168.0.52/32\n   seq 30 permit 192.15.71.0/32\n
+    \  seq 40 permit 192.15.72.0/32\n   seq 50 permit 192.16.71.0/32\n   seq 60 permit
+    192.16.72.0/32\n!\nroute-map E2OUT permit 10\n   match ip address prefix-list
+    E2OUT\n!\nroute-map E3OUT permit 10\n   match ip address prefix-list E3OUT\n!\nroute-map
+    E4OUT permit 10\n   match ip address prefix-list E4OUT\n!\nroute-map E5OUT permit
+    10\n   match ip address prefix-list E5OUT\n!\nroute-map E6OUT permit 10\n   match
+    ip address prefix-list E6OUT\n!\nrouter bgp 65000\n   router-id 52.52.52.52\n
+    \  neighbor COREPE1 peer group\n   neighbor COREPE1 remote-as 65001\n   neighbor
+    COREPE1 allowas-in 6\n   neighbor COREPE2 peer group\n   neighbor COREPE2 remote-as
+    65001\n   neighbor COREPE2 allowas-in 6\n   neighbor ISP-3 peer group\n   neighbor
+    ISP-3 remote-as 65002\n   neighbor ISP-3 allowas-in 6\n   neighbor 192.15.52.1
+    remote-as 65102\n   neighbor 192.15.52.1 allowas-in 6\n   neighbor 192.16.52.1
+    remote-as 65103\n   neighbor 192.16.52.1 allowas-in 6\n   neighbor 192.52.75.2
+    peer group ISP-3\n   neighbor 192.52.81.2 peer group COREPE1\n   neighbor 192.52.82.2
+    peer group COREPE2\n   !\n   address-family ipv4\n      neighbor COREPE1 route-map
+    E4OUT out\n      neighbor COREPE1 activate\n      neighbor COREPE2 route-map E5OUT
+    out\n      neighbor COREPE2 activate\n      neighbor ISP-3 route-map E6OUT out\n
+    \     neighbor ISP-3 activate\n      neighbor 192.15.52.1 route-map E3OUT out\n
+    \     neighbor 192.15.52.1 activate\n      neighbor 192.16.52.1 route-map E2OUT
+    out\n      neighbor 192.16.52.1 activate\n      network 192.168.0.52/32\n!\nend\n"
   AVD_P2: "!RANCID-CONTENT-TYPE: arista\n!\nvlan internal order ascending range 1006
     1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice routing protocols model
     multi-agent\n!\nhostname P2\ndns domain atd.lab\n!\nspanning-tree mode none\n!\nno
@@ -412,15 +478,33 @@ cvp_configlets:
     Ethernet6\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.53.75.1/24\n!\ninterface
     Ethernet7\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.24.53.2/24\n!\ninterface
     Loopback10\n   description Region2_P20_lo10\n   no shutdown\n   ip address 192.168.0.53/32\n!\nip
-    routing\n!\nrouter bgp 65000\n   router-id 192.168.0.53\n   neighbor CORE peer
-    group\n   neighbor CORE remote-as 65001\n   neighbor CORE allowas-in 6\n   neighbor
-    ISP-3 peer group\n   neighbor ISP-3 remote-as 65002\n   neighbor ISP-3 allowas-in
-    6\n   neighbor 192.25.53.1 remote-as 65202\n   neighbor 192.25.53.1 allowas-in
-    6\n   neighbor 192.26.53.1 remote-as 65203\n   neighbor 192.26.53.1 allowas-in
-    6\n   neighbor 192.53.75.2 peer group ISP-3\n   neighbor 192.53.83.2 peer group
-    CORE\n   neighbor 192.53.84.2 peer group CORE\n   !\n   address-family ipv4\n
-    \     neighbor CORE activate\n      neighbor ISP-3 activate\n      neighbor 192.25.53.1
-    activate\n      neighbor 192.26.53.1 activate\n      network 192.168.0.53/32\n!\nend\n"
+    routing\n!\nip prefix-list E2OUT\n   seq 10 permit 192.25.53.0/24\n   seq 20 permit
+    192.168.0.53/32\n!\nip prefix-list E3OUT\n   seq 10 permit 192.26.53.0/24\n   seq
+    20 permit 192.168.0.53/32\n!\nip prefix-list E4OUT\n   seq 10 permit 192.53.83.0/24\n
+    \  seq 20 permit 192.168.0.53/32\n   seq 30 permit 192.25.76.0/32\n   seq 40 permit
+    192.25.77.0/32\n   seq 50 permit 192.26.76.0/32\n   seq 60 permit 192.26.77.0/32\n!\nip
+    prefix-list E5OUT\n   seq 10 permit 192.53.84.0/24\n   seq 20 permit 192.168.0.53/32\n
+    \  seq 30 permit 192.25.76.0/32\n   seq 40 permit 192.25.77.0/32\n   seq 50 permit
+    192.26.76.0/32\n   seq 60 permit 192.26.77.0/32\n!\nip prefix-list E6OUT\n   seq
+    10 permit 192.53.75.0/24\n   seq 20 permit 192.168.0.53/32\n   seq 30 permit 192.25.76.0/32\n
+    \  seq 40 permit 192.25.77.0/32\n   seq 50 permit 192.26.76.0/32\n   seq 60 permit
+    192.26.77.0/32\n!\nroute-map E2OUT permit 10\n   match ip address prefix-list
+    E2OUT\n!\nroute-map E3OUT permit 10\n   match ip address prefix-list E3OUT\n!\nroute-map
+    E4OUT permit 10\n   match ip address prefix-list E4OUT\n!\nroute-map E5OUT permit
+    10\n   match ip address prefix-list E5OUT\n!\nroute-map E6OUT permit 10\n   match
+    ip address prefix-list E6OUT\n!\nrouter bgp 65000\n   router-id 192.168.0.53\n
+    \  neighbor CORE peer group\n   neighbor CORE remote-as 65001\n   neighbor CORE
+    allowas-in 6\n   neighbor ISP-3 peer group\n   neighbor ISP-3 remote-as 65002\n
+    \  neighbor ISP-3 allowas-in 6\n   neighbor 192.25.53.1 remote-as 65202\n   neighbor
+    192.25.53.1 allowas-in 6\n   neighbor 192.26.53.1 remote-as 65203\n   neighbor
+    192.26.53.1 allowas-in 6\n   neighbor 192.53.75.2 peer group ISP-3\n   neighbor
+    192.53.83.2 peer group COREPE3\n   neighbor 192.53.84.2 peer group COREPE4\n   !\n
+    \  address-family ipv4\n      neighbor COREPE3 route-map E4OUT out\n      neighbor
+    COREPE3 activate\n      neighbor COREPE4 route-map E5OUT out\n      neighbor COREPE4
+    activate\n      neighbor ISP-3 route-map E6OUT out\n      neighbor ISP-3 activate\n
+    \     neighbor 192.25.53.1 route-map E2OUT out\n      neighbor 192.25.53.1 activate\n
+    \     neighbor 192.26.53.1 route-map E3OUT out\n      neighbor 192.26.53.1 activate\n
+    \     network 192.168.0.53/32\n!\nend\n"
   AVD_P21: "!RANCID-CONTENT-TYPE: arista\n!\ntransceiver qsfp default-mode 4x10G\n!\nhostname
     P21\n!\nspanning-tree mode none\n!\nno enable password\nno aaa root\n!\ninterface
     Ethernet1\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.53.54.2/24\n!\ninterface
@@ -431,15 +515,33 @@ cvp_configlets:
     Ethernet6\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.54.75.1/24\n!\ninterface
     Ethernet7\n   no shutdown\n   mtu 1500\n   no switchport\n   ip address 192.24.54.2/24\n!\ninterface
     Loopback10\n   description Region2_P21_lo10\n   no shutdown\n   ip address 192.168.0.54/32\n!\nip
-    routing\n!\nrouter bgp 65000\n   router-id 192.168.0.54\n   neighbor CORE peer
-    group\n   neighbor CORE remote-as 65001\n   neighbor CORE allowas-in 6\n   neighbor
-    ISP-3 peer group\n   neighbor ISP-3 remote-as 65002\n   neighbor ISP-3 allowas-in
-    6\n   neighbor 192.25.54.1 remote-as 65202\n   neighbor 192.25.54.1 allowas-in
-    6\n   neighbor 192.26.54.1 remote-as 65203\n   neighbor 192.26.54.1 allowas-in
-    6\n   neighbor 192.54.75.2 peer group ISP-3\n   neighbor 192.54.83.2 peer group
-    CORE\n   neighbor 192.54.84.2 peer group CORE\n   !\n   address-family ipv4\n
-    \     neighbor CORE activate\n      neighbor ISP-3 activate\n      neighbor 192.25.54.1
-    activate\n      neighbor 192.26.54.1 activate\n      network 192.168.0.54/32\n!\nend\n"
+    routing\n!\nip prefix-list E2OUT\n   seq 10 permit 192.26.54.0/24\n   seq 20 permit
+    192.168.0.54/32\n!\nip prefix-list E3OUT\n   seq 10 permit 192.25.54.0/24\n   seq
+    20 permit 192.168.0.54/32\n!\nip prefix-list E4OUT\n   seq 10 permit 192.54.83.0/24\n
+    \  seq 20 permit 192.168.0.54/32\n   seq 30 permit 192.25.76.0/32\n   seq 40 permit
+    192.25.77.0/32\n   seq 50 permit 192.26.76.0/32\n   seq 60 permit 192.26.77.0/32\n!\nip
+    prefix-list E5OUT\n   seq 10 permit 192.54.84.0/24\n   seq 20 permit 192.168.0.54/32\n
+    \  seq 30 permit 192.25.76.0/32\n   seq 40 permit 192.25.77.0/32\n   seq 50 permit
+    192.26.76.0/32\n   seq 60 permit 192.26.77.0/32\n!\nip prefix-list E6OUT\n   seq
+    10 permit 192.54.75.0/24\n   seq 20 permit 192.168.0.54/32\n   seq 30 permit 192.25.76.0/32\n
+    \  seq 40 permit 192.25.77.0/32\n   seq 50 permit 192.26.76.0/32\n   seq 60 permit
+    192.26.77.0/32\n!\nroute-map E2OUT permit 10\n   match ip address prefix-list
+    E2OUT\n!\nroute-map E3OUT permit 10\n   match ip address prefix-list E3OUT\n!\nroute-map
+    E4OUT permit 10\n   match ip address prefix-list E4OUT\n!\nroute-map E5OUT permit
+    10\n   match ip address prefix-list E5OUT\n!\nroute-map E6OUT permit 10\n   match
+    ip address prefix-list E6OUT\n!\nrouter bgp 65000\n   router-id 192.168.0.54\n
+    \  neighbor CORE peer group\n   neighbor CORE remote-as 65001\n   neighbor CORE
+    allowas-in 6\n   neighbor ISP-3 peer group\n   neighbor ISP-3 remote-as 65002\n
+    \  neighbor ISP-3 allowas-in 6\n   neighbor 192.25.54.1 remote-as 65202\n   neighbor
+    192.25.54.1 allowas-in 6\n   neighbor 192.26.54.1 remote-as 65203\n   neighbor
+    192.26.54.1 allowas-in 6\n   neighbor 192.54.75.2 peer group ISP-3\n   neighbor
+    192.54.83.2 peer group CORE\n   neighbor 192.54.84.2 peer group CORE\n   !\n   address-family
+    ipv4\n      neighbor COREPE3 route-map E4OUT out\n      neighbor COREPE3 activate\n
+    \     neighbor COREPE4 route-map E5OUT out\n      neighbor COREPE4 activate\n
+    \     neighbor ISP-3 route-map E6OUT out\n      neighbor ISP-3 activate\n      neighbor
+    192.25.54.1 route-map E3OUT out\n      neighbor 192.25.54.1 activate\n      neighbor
+    192.26.54.1 route-map E2OUT out\n      neighbor 192.26.54.1 activate\n      network
+    192.168.0.54/32\n!\nend\n"
   AVD_P3: "!RANCID-CONTENT-TYPE: arista\n!\nvlan internal order ascending range 1006
     1199\n!\ntransceiver qsfp default-mode 4x10G\n!\nservice routing protocols model
     multi-agent\n!\nhostname P3\ndns domain atd.lab\n!\nspanning-tree mode none\n!\nno
