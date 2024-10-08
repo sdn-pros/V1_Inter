@@ -2,9 +2,6 @@ hostname: Edge10
 ip_routing: true
 spanning_tree:
   mode: none
-vrfs:
-- name: VRF_A
-  ip_routing: true
 loopback_interfaces:
 - name: Loopback10
   description: Edge-10_l10
@@ -26,7 +23,6 @@ ethernet_interfaces:
   type: routed
   shutdown: false
   mtu: 1500
-  vrf: VRF_A
   ip_address: 192.10.31.1/24
 - name: Ethernet4
   peer: R1-PE1
@@ -64,17 +60,5 @@ router_bgp:
           activate: true
     networks: 
       - prefix: 192.168.0.10/32
-  vrfs:
-    - name: VRF_A
-      neighbors:
-        - ip_address: 192.10.31.2
-          remote_as:  65000
-          allowas_in:
-            enabled: true
-            times: 6
-      networks: 
-        - prefix: 192.168.0.10/32
-      redistribute_routes:
-        - source_protocol: connected
 
       

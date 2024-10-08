@@ -41,7 +41,7 @@ ethernet_interfaces:
 - name: Ethernet6
   peer: ISP-3
   type: routed
-  shutdown: false
+  shutdown: true
   mtu: 1500
   ip_address: 192.51.75.1/24
 - name: Ethernet7
@@ -107,7 +107,7 @@ router_bgp:
         activate: true
         route_map_out: E5OUT
       - name: ISP-3
-        activate: true
+        activate: false
         route_map_out: E6OUT
     networks:
       - prefix: 192.168.0.51/32

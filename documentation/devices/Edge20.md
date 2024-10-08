@@ -10,11 +10,7 @@
   - [Loopback Interfaces](#loopback-interfaces)
 - [Routing](#routing)
   - [IP Routing](#ip-routing)
-  - [IPv6 Routing](#ipv6-routing)
   - [Router BGP](#router-bgp)
-- [VRF Instances](#vrf-instances)
-  - [VRF Instances Summary](#vrf-instances-summary)
-  - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
 
 ## Spanning Tree
 
@@ -46,7 +42,7 @@ spanning-tree mode none
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet3 | - | routed | - | 192.20.33.1/24 | VRF_A | - | False | - | - |
+| Ethernet3 | - | routed | - | 192.20.33.1/24 | default | 1500 | False | - | - |
 | Ethernet4 | - | routed | - | 192.20.25.1/24 | default | 1500 | False | - | - |
 | Ethernet5 | - | routed | - | 192.20.26.1/24 | default | 1500 | False | - | - |
 
@@ -66,8 +62,8 @@ interface Ethernet2
 !
 interface Ethernet3
    no shutdown
+   mtu 1500
    no switchport
-   vrf VRF_A
    ip address 192.20.33.1/24
 !
 interface Ethernet4
@@ -118,24 +114,13 @@ interface Loopback10
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | True |
-| VRF_A | True |
 
 #### IP Routing Device Configuration
 
 ```eos
 !
 ip routing
-ip routing vrf VRF_A
 ```
-
-### IPv6 Routing
-
-#### IPv6 Routing Summary
-
-| VRF | Routing Enabled |
-| --- | --------------- |
-| default | False |
-| VRF_A | false |
 
 ### Router BGP
 
@@ -182,19 +167,4 @@ router bgp 65000
       neighbor 192.20.33.2 remote-as 65000
       neighbor 192.20.33.2 allowas-in 6
       network 192.168.0.20/32
-```
-
-## VRF Instances
-
-### VRF Instances Summary
-
-| VRF Name | IP Routing |
-| -------- | ---------- |
-| VRF_A | enabled |
-
-### VRF Instances Device Configuration
-
-```eos
-!
-vrf instance VRF_A
 ```

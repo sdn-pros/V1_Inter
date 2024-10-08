@@ -46,10 +46,10 @@ spanning-tree mode none
 
 | Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | - | routed | - | 192.51.75.2/24 | default | 1500 | False | - | - |
-| Ethernet2 | - | routed | - | 192.52.75.2/24 | default | 1500 | False | - | - |
-| Ethernet3 | - | routed | - | 192.54.75.2/24 | default | 1500 | False | - | - |
-| Ethernet4 | - | routed | - | 192.53.75.2/24 | default | 1500 | False | - | - |
+| Ethernet1 | - | routed | - | 192.51.75.2/24 | default | 1500 | True | - | - |
+| Ethernet2 | - | routed | - | 192.52.75.2/24 | default | 1500 | True | - | - |
+| Ethernet3 | - | routed | - | 192.54.75.2/24 | default | 1500 | True | - | - |
+| Ethernet4 | - | routed | - | 192.53.75.2/24 | default | 1500 | True | - | - |
 | Ethernet7 | - | routed | - | 192.16.75.2/24 | default | 1500 | False | - | - |
 | Ethernet8 | - | routed | - | 192.26.75.2/24 | default | 1500 | False | - | - |
 
@@ -58,25 +58,25 @@ spanning-tree mode none
 ```eos
 !
 interface Ethernet1
-   no shutdown
+   shutdown
    mtu 1500
    no switchport
    ip address 192.51.75.2/24
 !
 interface Ethernet2
-   no shutdown
+   shutdown
    mtu 1500
    no switchport
    ip address 192.52.75.2/24
 !
 interface Ethernet3
-   no shutdown
+   shutdown
    mtu 1500
    no switchport
    ip address 192.54.75.2/24
 !
 interface Ethernet4
-   no shutdown
+   shutdown
    mtu 1500
    no switchport
    ip address 192.53.75.2/24
@@ -238,9 +238,9 @@ router bgp 65002
       neighbor R1Internet activate
       neighbor R2Internet activate
       neighbor REGION1 route-map DEFAULTONLY out
-      neighbor REGION1 activate
+      no neighbor REGION1 activate
       neighbor REGION2 route-map DEFAULTONLY out
-      neighbor REGION2 activate
+      no neighbor REGION2 activate
       network 0.0.0.0/0
       network 192.168.0.75/32
       redistribute connected

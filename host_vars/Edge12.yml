@@ -2,9 +2,6 @@ hostname: Edge12
 ip_routing: true
 spanning_tree:
   mode: none
-vrfs:
-- name: VRF_A
-  ip_routing: true
 loopback_interfaces:
 - name: Loopback10
   description: Edge-12_lo10
@@ -12,7 +9,6 @@ loopback_interfaces:
   ip_address: 192.168.0.12/32
 ethernet_interfaces:
 - name: Ethernet1
-  vrf: VRF_A
   peer: Leaf12
   type: routed
   shutdown: false
@@ -62,22 +58,4 @@ router_bgp:
       - prefix: 192.168.0.12/32
   redistribute_routes:
     - source_protocol: connected
-  vrfs:
-    - name: VRF_A
-      neighbors:
-        - ip_address: 192.12.32.2
-          remote_as:  65000
-          allowas_in:
-            enabled: true
-            times: 6
-      address_family_ipv4:
-          neighbors:
-          - ip_address:  192.12.32.2
-            activate: true  
-          networks: 
-          - prefix: 192.168.0.12/32
-          redistribute_routes:
-          - source_protocol: connected              
-      networks: 
-        - prefix: 192.168.0.12/32
 
